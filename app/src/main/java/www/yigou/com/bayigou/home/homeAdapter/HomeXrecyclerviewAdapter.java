@@ -21,6 +21,7 @@ import www.yigou.com.bayigou.home.utils.BannerGlideImageLoader;
  */
 
 public class HomeXrecyclerviewAdapter extends XRecyclerView.Adapter<XRecyclerView.ViewHolder> {
+
     //上下文环境
     private Context context;
     private HomeBean homeBean;
