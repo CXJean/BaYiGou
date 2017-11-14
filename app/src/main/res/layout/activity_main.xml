@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="www.yigou.com.bayigou.MainActivity">
+
+    <!--fragment-->
+    <FrameLayout
+        android:layout_above="@+id/layout_buttom"
+        android:id="@+id/frags"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </FrameLayout>
+
+    <!--android:background="#efebeb"-->
+    <!--底部按钮-->
+    <LinearLayout
+        android:id="@+id/layout_buttom"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+
+        android:layout_height="wrap_content">
+        <RadioGroup
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <RadioButton
+                android:id="@+id/rbtn_home"
+                style="@style/apps_nav"
+                android:drawableTop="@drawable/draw_buttton_home"
+                android:text="首页"
+
+                />
+            <RadioButton
+                android:id="@+id/rbtn_sort"
+                style="@style/apps_nav"
+                android:drawableTop="@drawable/draw_buttton_class"
+                android:text="分类"
+                />
+            <RadioButton
+                android:id="@+id/rbtn_cart"
+                style="@style/apps_nav"
+                android:drawableTop="@drawable/draw_buttton_cart"
+                android:text="购物车"
+                />
+            <RadioButton
+                android:id="@+id/rbtn_mine"
+                style="@style/apps_nav"
+                android:drawableTop="@drawable/draw_buttton_user"
+                android:text="个人"
+                />
+        </RadioGroup>
+
+    </LinearLayout>
+</RelativeLayout>
