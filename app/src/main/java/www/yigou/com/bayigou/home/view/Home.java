@@ -49,6 +49,7 @@ public class Home extends Fragment implements HomeView{
 
 
     public static final int REQUEST_CODE = 0;
+    private HomeXrecyclerviewAdapter homeXrecyclerviewAdapter;
 
     @Nullable
     @Override
@@ -117,17 +118,17 @@ public class Home extends Fragment implements HomeView{
         }
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        unbinder.unbind();
-    }
 
     @Override
     public void getHttpHomeData(HomeBean homeBean) {
 
         Log.d("main",homeBean.getMsg()+homeBean.getCode()+"===========");
-        HomeXrecyclerviewAdapter homeXrecyclerviewAdapter = new HomeXrecyclerviewAdapter(getActivity(), homeBean);
+        homeXrecyclerviewAdapter = new HomeXrecyclerviewAdapter(getActivity(), homeBean);
         xRecyclerView.setAdapter(homeXrecyclerviewAdapter);
+    }
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
     }
 }

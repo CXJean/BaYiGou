@@ -3,7 +3,7 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!--搜索框-->
+    搜索框
     <LinearLayout
         android:layout_alignParentTop="true"
         android:id="@+id/searchLayout"
