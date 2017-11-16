@@ -15,6 +15,7 @@ import www.yigou.com.bayigou.home.bean.HomeBean;
 
 /**
  * Created by xue on 2017-11-14.
+ * 主题的适配器
  */
 
 public class ItemSubjectAdapter extends RecyclerView.Adapter<ItemSubjectAdapter.staggerView> {
