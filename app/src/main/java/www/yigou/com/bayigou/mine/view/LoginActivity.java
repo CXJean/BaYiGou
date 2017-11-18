@@ -13,11 +13,15 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.greenrobot.eventbus.EventBus;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import es.dmoral.toasty.Toasty;
 import www.yigou.com.bayigou.R;
+import www.yigou.com.bayigou.mine.bean.User;
+import www.yigou.com.bayigou.mine.bean.UserBean;
 import www.yigou.com.bayigou.mine.presenter.MineLoginPresenter;
 
 public class LoginActivity extends AppCompatActivity implements MineILoginView{
@@ -80,10 +84,14 @@ public class LoginActivity extends AppCompatActivity implements MineILoginView{
     }
 
     @Override
-    public void onLoginSuccess(String code) {//成功
+    public void onLoginSuccess(UserBean userBean) {//成功
+        String code = userBean.getCode();
         if (code.equals("0")){
+            //普通时间发送消息给putong1用post方法
+
             Toasty.success(LoginActivity.this, "登陆成功!", Toast.LENGTH_SHORT).show();
             Log.d(TAG, "onLoginSuccess: ==========="+code);
+            EventBus.getDefault().post(new User(nameStr,passStr,userBean.getData().getUid()+""));
             finish();
         }
     }

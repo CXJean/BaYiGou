@@ -27,7 +27,7 @@ public class RetroLoginFactory {
             .baseUrl(Api.LOGIN_REG)
             .addConverterFactory(GsonConverterFactory.create())
             .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-//            .client(httpClient)//添加拦截器
+            .client(httpClient)//添加拦截器
             .build()
             .create(ApiServer.class);
     //单列模式

@@ -12,4 +12,7 @@ public class Api {
     //登陆,注册.
     public static final String LOGIN_REG="http://120.27.23.105/";
 
+    public static final String SORT_RIGHT_PATH = "product/getProductCatagory";
+
+
 }

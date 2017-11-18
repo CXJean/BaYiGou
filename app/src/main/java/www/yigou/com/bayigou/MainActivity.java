@@ -1,5 +1,6 @@
 package www.yigou.com.bayigou;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -15,6 +16,8 @@ import butterknife.OnClick;
 import es.dmoral.toasty.Toasty;
 import www.yigou.com.bayigou.cart.view.Cart;
 import www.yigou.com.bayigou.home.view.Home;
+import www.yigou.com.bayigou.mine.bean.User;
+import www.yigou.com.bayigou.mine.view.LoginActivity;
 import www.yigou.com.bayigou.mine.view.Mine;
 import www.yigou.com.bayigou.sort.view.Sort;
 
@@ -82,7 +85,12 @@ public class MainActivity extends AppCompatActivity {
                 fm.beginTransaction().hide(home).hide(cart).hide(mine).show(sort).commit();
                 break;
             case R.id.rbtn_cart:
-                fm.beginTransaction().hide(home).hide(sort).hide(mine).show(cart).commit();
+                if (true){
+                    fm.beginTransaction().hide(home).hide(sort).hide(mine).show(cart).commit();
+                }else{
+                    Intent intent = new Intent(this, LoginActivity.class);
+                    startActivity(intent);
+                }
                 break;
             case R.id.rbtn_mine:
                 fm.beginTransaction().hide(home).hide(sort).hide(cart).show(mine).commit();

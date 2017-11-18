@@ -4,16 +4,21 @@ import android.content.Context;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.youth.banner.Banner;
+import com.youth.banner.listener.OnBannerClickListener;
+import com.youth.banner.listener.OnBannerListener;
 
 import java.util.ArrayList;
 
 import butterknife.BindView;
+import es.dmoral.toasty.Toasty;
 import www.yigou.com.bayigou.R;
 import www.yigou.com.bayigou.home.bean.HomeBean;
 import www.yigou.com.bayigou.home.utils.BannerGlideImageLoader;
@@ -46,8 +51,8 @@ public class HomeXrecyclerviewAdapter extends XRecyclerView.Adapter<XRecyclerVie
         TypeSubject1Info,
         TypeSubject2,
         TypeSubject2Info,
-        Type8,
-        Type9
+        TypeLike,
+        TypeLikeInfo
     }
 
     /**
@@ -85,6 +90,14 @@ public class HomeXrecyclerviewAdapter extends XRecyclerView.Adapter<XRecyclerVie
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.home_recy_item, null);
             ViewHolderSubject2Info viewHolderSubject2info = new ViewHolderSubject2Info(view);
             return viewHolderSubject2info;
+        }else if (viewType == Item_Type.TypeLike.ordinal()) {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.home_recy_item, null);
+            ViewHolderLike viewHolderLike = new ViewHolderLike(view);
+            return viewHolderLike;
+        }else if (viewType == Item_Type.TypeLikeInfo.ordinal()) {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.home_recy_item, null);
+            ViewHolderLikeInfo viewHolderLikeInfo = new ViewHolderLikeInfo(view);
+            return viewHolderLikeInfo;
         }
         return null;
     }
@@ -101,6 +114,12 @@ public class HomeXrecyclerviewAdapter extends XRecyclerView.Adapter<XRecyclerVie
             ((ViewHolderBanner) holder).mybanner.setImageLoader(new BannerGlideImageLoader());
             ((ViewHolderBanner) holder).mybanner.setImages(mlist);
             ((ViewHolderBanner) holder).mybanner.start();
+            ((ViewHolderBanner) holder).mybanner.setOnBannerListener(new OnBannerListener() {
+                @Override
+                public void OnBannerClick(int position) {
+                    Toasty.success(context,"点击了banner"+position, Toast.LENGTH_SHORT).show();
+                }
+            });
         } else if (holder instanceof ViewHolderTitle) {
             //竖列的标题(每日签到)
             // 网格布局
@@ -132,6 +151,16 @@ public class HomeXrecyclerviewAdapter extends XRecyclerView.Adapter<XRecyclerVie
             ((ViewHolderSubject2Info) holder).homeItemRcview.setLayoutManager(
                     new LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL,true));
             ((ViewHolderSubject2Info) holder).homeItemRcview.setAdapter(new ItemTitleAdapter(4,context, homeBean.getData()));
+        }else if (holder instanceof ViewHolderLike) {
+            //猜你喜欢
+            ((ViewHolderLike) holder).homeItemRcview.setLayoutManager(
+                    new LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL,true));
+            ((ViewHolderLike) holder).homeItemRcview.setAdapter(new ItemSubjectAdapter(3,context, homeBean.getData()));
+        }else if (holder instanceof ViewHolderLikeInfo) {
+            //猜你喜欢列表，瀑布流
+            ((ViewHolderLikeInfo) holder).homeItemRcview.setLayoutManager(
+                    new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL));
+            ((ViewHolderLikeInfo) holder).homeItemRcview.setAdapter(new ItemTitleAdapter(5,context, homeBean.getData()));
         }
     }
 
@@ -152,13 +181,17 @@ public class HomeXrecyclerviewAdapter extends XRecyclerView.Adapter<XRecyclerVie
             return Item_Type.TypeSubject2.ordinal();
         }else if (position == 6) {
             return Item_Type.TypeSubject2Info.ordinal();
+        }else if (position == 7) {
+            return Item_Type.TypeLike.ordinal();
+        }else if (position == 8) {
+            return Item_Type.TypeLikeInfo.ordinal();
         }
         return 0;
     }
 
     @Override
     public int getItemCount() {
-        return 7;
+        return 9;
     }
 
     //轮播图
@@ -229,6 +262,25 @@ public class HomeXrecyclerviewAdapter extends XRecyclerView.Adapter<XRecyclerVie
         public RecyclerView homeItemRcview;
 
         public ViewHolderSubject2Info(View itemView) {
+            super(itemView);
+            homeItemRcview = (RecyclerView) itemView.findViewById(R.id.home_item_rcview);
+        }
+    }
+    //猜你喜欢标题
+    class ViewHolderLike extends RecyclerView.ViewHolder {
+
+        public RecyclerView homeItemRcview;
+
+        public ViewHolderLike(View itemView) {
+            super(itemView);
+            homeItemRcview = (RecyclerView) itemView.findViewById(R.id.home_item_rcview);
+        }
+    }//猜你喜欢列表
+    class ViewHolderLikeInfo extends RecyclerView.ViewHolder {
+
+        public RecyclerView homeItemRcview;
+
+        public ViewHolderLikeInfo(View itemView) {
             super(itemView);
             homeItemRcview = (RecyclerView) itemView.findViewById(R.id.home_item_rcview);
         }

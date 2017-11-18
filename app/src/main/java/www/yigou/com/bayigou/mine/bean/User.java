@@ -8,6 +8,14 @@ public class User {
     //定义两个变量
     private String username;
     private String password;
+    private String uid;
+
+    public User(String username, String password, String uid) {
+        this.username = username;
+        this.password = password;
+        this.uid = uid;
+    }
+
     public User(String username, String password) {
         this.username = username;
         this.password = password;
@@ -29,4 +37,11 @@ public class User {
         this.password = password;
     }
 
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
 }

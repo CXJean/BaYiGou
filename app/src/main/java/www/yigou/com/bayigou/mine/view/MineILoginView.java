@@ -1,5 +1,7 @@
 package www.yigou.com.bayigou.mine.view;
 
+import www.yigou.com.bayigou.mine.bean.UserBean;
+
 /**
  * Created by xue on 2017-11-13.
  */
@@ -10,7 +12,7 @@ public interface MineILoginView {
      * 代码提供规范
      * 登录成功
      */
-    void onLoginSuccess(String code);
+    void onLoginSuccess(UserBean userBean);
 
     /**
      * 登录失败

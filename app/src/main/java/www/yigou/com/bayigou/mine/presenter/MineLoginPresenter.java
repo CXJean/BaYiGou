@@ -40,7 +40,7 @@ public class MineLoginPresenter implements MineLoginModel.OnFinishLisenter{
         String code =userBean.getCode();
         if (code.equals("0")){
             //成功
-            mineILoginView.onLoginSuccess(code);
+            mineILoginView.onLoginSuccess(userBean);
         }else if(code.equals("1")){
             //失败
             mineILoginView.onLoginFailed(code);
