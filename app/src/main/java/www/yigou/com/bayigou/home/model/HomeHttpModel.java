@@ -19,6 +19,7 @@ import www.yigou.com.bayigou.utils.RetroFactory;
 public class HomeHttpModel implements HomeModel{
 
     private static final String TAG = "homeModel";
+
     private OnDataFinish onDataFinish;
 
     //

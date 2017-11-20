@@ -100,9 +100,6 @@ public class ProductCatagory {
             private String pcid;
             private String pscid;
 
-            public ListBean(String icon, String name, String pcid, String pscid) {
-
-            }
 
             public String getIcon() {
                 return icon;

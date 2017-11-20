@@ -7,6 +7,7 @@ import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,10 +28,19 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import rx.Observable;
+import rx.Observer;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 import www.yigou.com.bayigou.R;
 import www.yigou.com.bayigou.cart.CartAdapter.ShopcartAdapter;
+import www.yigou.com.bayigou.cart.bean.CartsBean;
 import www.yigou.com.bayigou.cart.bean.GoodsInfo;
 import www.yigou.com.bayigou.cart.bean.StoreInfo;
+import www.yigou.com.bayigou.cart.model.OnGetCartsFinishListener;
+import www.yigou.com.bayigou.home.bean.AddCart;
+import www.yigou.com.bayigou.home.model.OnDataFinish;
+import www.yigou.com.bayigou.utils.RetroLoginFactory;
 
 /**
  * Created by xue on 2017-11-09.
@@ -38,6 +48,8 @@ import www.yigou.com.bayigou.cart.bean.StoreInfo;
 
 public class Cart extends Fragment  implements ShopcartAdapter.CheckInterface,
         ShopcartAdapter.ModifyCountInterface, ShopcartAdapter.GroupEdtorListener{
+
+    public static final String TAG="Cart";
 
     @BindView(R.id.back)
     ImageView back;
@@ -67,6 +79,7 @@ public class Cart extends Fragment  implements ShopcartAdapter.CheckInterface,
     LinearLayout llShar;
     Unbinder unbinder;
 
+    private CartsBean cartsBean;
 
     private Cart context;
     private double totalPrice = 0.00;// 购买的商品总价
@@ -85,8 +98,9 @@ public class Cart extends Fragment  implements ShopcartAdapter.CheckInterface,
 
         unbinder = ButterKnife.bind(this, view);
 
-        initDatas();
-        initEvents();
+        getSelectCarts("904");
+//        initDatas();
+//        initEvents();
         return view;
 
     }
@@ -97,6 +111,7 @@ public class Cart extends Fragment  implements ShopcartAdapter.CheckInterface,
         selva.setModifyCountInterface(this);// 关键步骤2,设置数量增减接口
         selva.setmListener(this);
         exListView.setAdapter(selva);
+        //默认展开列表
         for (int i = 0; i < selva.getGroupCount(); i++) {
             exListView.expandGroup(i);// 关键步骤3,初始化时，将ExpandableListView以展开的方式呈现
         }
@@ -127,18 +142,45 @@ public class Cart extends Fragment  implements ShopcartAdapter.CheckInterface,
      * 遵循适配器的数据列表填充原则，组元素被放在一个List中，对应的组元素下辖的子元素被放在Map中，<br>
      * 其键是组元素的Id(通常是一个唯一指定组元素身份的值)
      */
-    private void initDatas() {
-        for (int i = 0; i < 3; i++) {
+    private void initDatas(CartsBean cartsBean) {
+      /*  for (int i = 0; i < 3; i++) {
             groups.add(new StoreInfo(i + "", "天猫店铺" + (i + 1) + "号店"));
             List<GoodsInfo> products = new ArrayList<GoodsInfo>();
             for (int j = 0; j <= i; j++) {
                 int[] img = {R.drawable.goods1, R.drawable.goods2, R.drawable.goods3, R.drawable.goods4, R.drawable.goods5, R.drawable.goods6};
-                products.add(new GoodsInfo(j + "", "商品", groups.get(i)
-                        .getName() + "的第" + (j + 1) + "个商品", 12.00 + new Random().nextInt(23), new Random().nextInt(5) + 1, "豪华", "1", img[i * j], 6.00 + new Random().nextInt(13)));
+                products.add(new GoodsInfo(j + "", "商品", groups.get(i).getName() + "的第" + (j + 1) + "个商品",
+                 12.00 + new Random().nextInt(23),
+                  new Random().nextInt(5) + 1,
+                   "豪华",
+                    "1",
+                   img[i * j],
+                    6.00 + new Random().nextInt(13)));
             }
             children.put(groups.get(i).getId(), products);// 将组元素的一个唯一值，这里取Id，作为子元素List的Key
-        }
+        }*/
+        Log.d(TAG, "initDatas: "+cartsBean.toString());
+         for (int i = 0; i < cartsBean.getData().size(); i++) {
+                groups.add(new StoreInfo(cartsBean.getData().get(i).getSellerid()+"", cartsBean.getData().get(i).getSellerName()));
+             Log.d(TAG, "initDatas: "+groups.size()+"=================");
+                List<GoodsInfo> products = new ArrayList<GoodsInfo>();
+             //此处的数量应该是小于,等于时，数组越界
+                for (int j = 0; j < cartsBean.getData().get(i).getList().size(); j++) {
+                    String images = cartsBean.getData().get(i).getList().get(j).getImages();
+                    String[] img = images.split("[|]");
+                    products.add(new GoodsInfo(j + "",
+                            "商品",
+                            cartsBean.getData().get(i).getList().get(j).getTitle(),
+                            cartsBean.getData().get(i).getList().get(j).getPrice() ,
+                            cartsBean.getData().get(i).getList().get(j).getNum(),
+                            "自然色",
+                            "1",
+                            img[i * j],
+                            cartsBean.getData().get(i).getList().get(j).getBargainPrice()));
 
+                children.put(groups.get(i).getId(), products);// 将组元素的一个唯一值，这里取Id，作为子元素List的Key
+             }
+         }
+        initEvents();
     }
 
     /**
@@ -166,8 +208,7 @@ public class Cart extends Fragment  implements ShopcartAdapter.CheckInterface,
         selva.notifyDataSetChanged();
         calculate();
     }
-
-
+    //解绑
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -408,5 +449,34 @@ public class Cart extends Fragment  implements ShopcartAdapter.CheckInterface,
         }
         selva.notifyDataSetChanged();
         handler.sendEmptyMessage(0);
+    }
+
+    public void getCartData(CartsBean cartsBean){
+        Log.d(TAG, "getCartData:数据 "+cartsBean.getMsg()+"=========="+cartsBean.getCode());
+    }
+
+    public void getSelectCarts(String uid){
+
+        Observable<CartsBean> Carts = RetroLoginFactory.getInstance().getSelectCart(uid);
+            Carts.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<CartsBean>() {
+                    @Override
+                    public void onCompleted() {
+                        Log.d(TAG, "onCompleted: ");
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.d(TAG, "onError: ");
+                       e.printStackTrace();
+                    }
+
+                    @Override
+                    public void onNext(CartsBean cartsBean) {
+                        Log.d(TAG, "查询购物车: "+cartsBean.getCode()+"=========="+cartsBean.getMsg()+"=========="+cartsBean.getData().get(0).getList().get(0).getTitle());
+                        initDatas(cartsBean);
+                    }
+                });
     }
 }

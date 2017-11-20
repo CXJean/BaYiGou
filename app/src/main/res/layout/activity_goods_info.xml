@@ -5,19 +5,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+
     tools:context="www.yigou.com.bayigou.home.view.GoodsInfoActivity">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_gravity="center_horizontal"
-        android:layout_height="wrap_content">
         <ImageView
             android:id="@+id/goodsImg"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
             android:src="@mipmap/ic_launcher"
             />
-    </LinearLayout>
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
@@ -102,10 +99,14 @@
             android:text="时间"
             />
     </LinearLayout>
+
     <Button
         android:id="@+id/buyIt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="加入购物车"
         />
+
+
+
 </LinearLayout>

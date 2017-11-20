@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.RadioButton;
@@ -20,6 +21,8 @@ import www.yigou.com.bayigou.mine.bean.User;
 import www.yigou.com.bayigou.mine.view.LoginActivity;
 import www.yigou.com.bayigou.mine.view.Mine;
 import www.yigou.com.bayigou.sort.view.Sort;
+import www.yigou.com.bayigou.utils.SharedPreferencesUtils;
+import www.yigou.com.bayigou.utils.SpUtil;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -39,6 +42,8 @@ public class MainActivity extends AppCompatActivity {
     private Sort sort;
     private Cart cart;
     private Mine mine;
+    private String useUid;
+    private String userUid;
 
 
     @Override
@@ -73,6 +78,8 @@ public class MainActivity extends AppCompatActivity {
         fTransaction.commit();
         //设置第一页默认选中
         rbtnHome.setChecked(true);
+//        //获取登陆状态
+//        userUid = SpUtil.getString(this, "uid", "");
     }
     //点击切换
     @OnClick({R.id.rbtn_home, R.id.rbtn_sort, R.id.rbtn_cart, R.id.rbtn_mine})
@@ -85,12 +92,13 @@ public class MainActivity extends AppCompatActivity {
                 fm.beginTransaction().hide(home).hide(cart).hide(mine).show(sort).commit();
                 break;
             case R.id.rbtn_cart:
-                if (true){
+                Log.d(TAG, "==========onViewClicked:============= "+userUid);
+//                if (userUid.equals("904")&&userUid!=null){
                     fm.beginTransaction().hide(home).hide(sort).hide(mine).show(cart).commit();
-                }else{
-                    Intent intent = new Intent(this, LoginActivity.class);
-                    startActivity(intent);
-                }
+//                }else{
+//                    Intent intent = new Intent(this, LoginActivity.class);
+//                    startActivity(intent);
+//                }
                 break;
             case R.id.rbtn_mine:
                 fm.beginTransaction().hide(home).hide(sort).hide(cart).show(mine).commit();

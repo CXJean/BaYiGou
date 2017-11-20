@@ -12,6 +12,8 @@ import retrofit2.http.POST;
 import retrofit2.http.QueryMap;
 import retrofit2.http.Url;
 import rx.Observable;
+import www.yigou.com.bayigou.cart.bean.CartsBean;
+import www.yigou.com.bayigou.home.bean.AddCart;
 import www.yigou.com.bayigou.home.bean.GoodsInfoBean;
 import www.yigou.com.bayigou.home.bean.HomeBean;
 import www.yigou.com.bayigou.mine.bean.UserBean;
@@ -42,7 +44,7 @@ public interface ApiServer {
     @POST("product/getProductDetail")
     Observable<GoodsInfoBean> getGoodsInfo(@Field("pid") String pid);
 
-    //商品分类接口
+    //商品分类接口,无参数
     @GET("product/getCatagory")
     Observable<Catagory> getCatagory();
 
@@ -50,5 +52,15 @@ public interface ApiServer {
     @FormUrlEncoded//读参数进行urlEncoded
     @POST("/product/getProductCatagory")
     Observable<ProductCatagory> getProductCatagory(@FieldMap HashMap<String,String> map);
+
+    //添加购物车
+    @FormUrlEncoded//读参数进行urlEncoded
+    @POST("/product/addCart")
+    Observable<AddCart> getAddCart(@Field("uid") String uid, @Field("pid") String pid);
+
+    //查询购物车
+    @FormUrlEncoded//读参数进行urlEncoded
+    @POST("/product/getCarts")
+    Observable<CartsBean> getSelectCart(@Field("uid") String uid);
 
 }

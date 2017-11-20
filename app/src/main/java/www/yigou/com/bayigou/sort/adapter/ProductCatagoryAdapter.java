@@ -36,7 +36,7 @@ public class ProductCatagoryAdapter extends BaseAdapter{
 
     @Override
     public int getCount() {
-        Log.d("getCount", "子类适配器: "+productCatagory.getData().size());
+        Log.d("getCount", "======子类适配器数量: "+productCatagory.getData().size());
         return productCatagory.getData().size();
     }
 
@@ -47,22 +47,19 @@ public class ProductCatagoryAdapter extends BaseAdapter{
 
     @Override
     public long getItemId(int position) {
-        Log.d("getItemId", "子类适配器: "+position+"========="+productCatagory.getCode());
 
         return position;
     }
 
-//    private GetProItemData getProItemData;
-//
-//    public interface GetProItemData{
-//        void getItemProData(String name,String pscid);
-//    }
-//
-//
-//    public void getProItemData(GetProItemData ProItemData) {
-//        this.getProItemData = ProItemData;
-//    }
+    public GetItemData getItemData;
 
+    public interface GetItemData{
+        void getItemData(String name,String pscid);
+    }
+
+    public void GetItemData(GetItemData getItemData) {
+        this.getItemData = getItemData;
+    }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -76,28 +73,28 @@ public class ProductCatagoryAdapter extends BaseAdapter{
         } else {
             holder = (ProductCatagoryHolder) convertView.getTag();
         }
-        Log.d("ProductCatagoryAdapter", "-----子类----getView: "+productCatagory.getData().get(position).getName());
         holder.tv.setText(productCatagory.getData().get(position).getName());
 
         list = new ArrayList<>();
 
-//        for (int j = 0; j < productCatagory.getData().get(position).getList().size(); j++) {
-//            List<ProductCatagory.DataBean.ListBean> list = productCatagory.getData().get(position).getList();
-//            ProductCatagory.DataBean.ListBean listBean = list.get(j);
-//
-//            list.add(new ProductCatagory.DataBean.ListBean(listBean.getIcon(),listBean.getName(),listBean.getPcid(),listBean.getPscid()));
-//        }
-//        //GridView图片
-//          /*有图的gridview*/
-//        final ProductsAdapter adapter = new ProductsAdapter(list, context);
-//        holder.gridView.setAdapter(adapter);
-//        holder.gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                Log.d("ProductCatagoryAdapter", "============onItemClick: ============"+list.get(position).getPscid());
-//                getItemData.getItemProData(list.get(position).getName(),list.get(position).getPscid()+"");
-//            }
-//        });
+       /* for (int j = 0; j < productCatagory.getData().get(position).getList().size(); j++) {
+            List<ProductCatagory.DataBean.ListBean> list = productCatagory.getData().get(position).getList();
+            ProductCatagory.DataBean.ListBean listBean = list.get(j);
+
+            list.add(new ProductCatagory.DataBean.ListBean(listBean.getIcon(),listBean.getName(),listBean.getPcid(),listBean.getPscid()));
+        }*/
+        Log.d("子类下的数据", "getView: "+list.get(0).getName()+"===="+list.size());
+        //GridView图片
+//          有图的gridview
+       /* final ProductsAdapter adapter = new ProductsAdapter(list, context);
+        holder.gridView.setAdapter(adapter);
+        holder.gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.d("ProductCatagoryAdapter", "============onItemClick: ============"+list.get(position).getPscid());
+                getItemData.getItemData(list.get(position).getName(),list.get(position).getPscid()+"");
+            }
+        });*/
 
         return convertView;
     }

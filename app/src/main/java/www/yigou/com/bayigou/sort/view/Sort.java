@@ -73,23 +73,21 @@ public class Sort extends Fragment implements InterSortView {
         });
         //分类列表点击
         cataClick();
-
     }
     //子分类
     @Override
     public void ShowProCaData(ProductCatagory productCatagory) {
 
         productCatagoryAdapter = new ProductCatagoryAdapter(getActivity(),productCatagory);
-        productListview.setAdapter(productsAdapter);
+        productListview.setAdapter(productCatagoryAdapter);
         Log.d(TAG, "------子分类------- "+productCatagory.getData().get(0).getName());
 
-       /* productCatagoryAdapter.getProItemData(new ProductCatagoryAdapter.GetProItemData() {
-            @Override
-            public void getItemProData(String name, String pscid) {
-                Log.d(TAG, "getItemProData: ==========="+name+"=============="+pscid);
-            }
-        });*/
-
+//        productCatagoryAdapter.GetItemData(new ProductCatagoryAdapter.GetItemData() {
+//            @Override
+//            public void getItemData(String name, String pscid) {
+//                Log.d(TAG, "getItemProData: ==========="+name+"=============="+pscid);
+//            }
+//        });
     }
     //分类列表点击请求子类数据
     private void cataClick() {

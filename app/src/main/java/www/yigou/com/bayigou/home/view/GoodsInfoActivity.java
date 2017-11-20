@@ -25,6 +25,7 @@ import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import www.yigou.com.bayigou.R;
+import www.yigou.com.bayigou.home.bean.AddCart;
 import www.yigou.com.bayigou.home.bean.GoodsInfoBean;
 import www.yigou.com.bayigou.home.bean.Pid;
 import www.yigou.com.bayigou.utils.RetroLoginFactory;
@@ -73,6 +74,7 @@ public class GoodsInfoActivity extends AppCompatActivity {
         mpid=pid.getPid();
         Log.d(TAG, "onCreate: pid值==========="+mpid);
     }
+    //展示数据
     private void initData() {
 
        Observable<GoodsInfoBean> goodsInfo = RetroLoginFactory.getInstance().getGoodsInfo(mpid);
@@ -127,6 +129,7 @@ public class GoodsInfoActivity extends AppCompatActivity {
                 Toasty.success(this, "商家详情", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.buyIt:
+                getAddGoods("904",mpid);
                 Toasty.success(this, "加入购物车成功"+mpid, Toast.LENGTH_SHORT).show();
                 break;
         }
@@ -137,5 +140,29 @@ public class GoodsInfoActivity extends AppCompatActivity {
         super.onDestroy();
         //取消注册
         EventBus.getDefault().unregister(this);
+    }
+
+    public void getAddGoods(String uid,String pid){
+
+        Observable<AddCart> addCart = RetroLoginFactory.getInstance().getAddCart(uid,pid);
+
+        addCart.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<AddCart>() {
+                    @Override
+                    public void onCompleted() {
+                        Log.d(TAG, "onCompleted: ");
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.d(TAG, "onError: ");
+                    }
+
+                    @Override
+                    public void onNext(AddCart addCart) {
+                        Log.d(TAG, "onNext: "+addCart.getCode()+"============"+addCart.getMsg());
+                    }
+                });
     }
 }

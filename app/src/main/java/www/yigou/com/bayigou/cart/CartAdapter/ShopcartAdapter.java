@@ -17,6 +17,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
 import java.util.List;
 import java.util.Map;
 
@@ -186,7 +188,8 @@ public class ShopcartAdapter extends BaseExpandableListAdapter {
             cholder.tv_product_desc.setText(goodsInfo.getDesc());
             cholder.tv_price.setText("￥" + goodsInfo.getPrice() + "");
             cholder.tv_count.setText(goodsInfo.getCount() + "");
-            cholder.iv_adapter_list_pic.setImageResource(goodsInfo.getGoodsImg());
+            Glide.with(context).load(goodsInfo.getGoodsImg().toString()).into(cholder.iv_adapter_list_pic);
+//            cholder.iv_adapter_list_pic.setImageResource(goodsInfo.getGoodsImg());
             cholder.tv_color_size.setText("颜色：" + goodsInfo.getColor() + "," + "尺码：" + goodsInfo.getSize() + "瓶/斤");
             SpannableString spanString = new SpannableString("￥"+String.valueOf(goodsInfo.getDiscountPrice()));
             StrikethroughSpan span = new StrikethroughSpan();

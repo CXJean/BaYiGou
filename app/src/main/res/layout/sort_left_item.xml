@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:padding="20dp"
         android:text="左侧文字"
-        android:textSize="30sp"
+        android:textSize="20sp"
         android:textStyle="bold"
         />
 

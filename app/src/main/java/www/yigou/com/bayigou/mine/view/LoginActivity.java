@@ -23,6 +23,8 @@ import www.yigou.com.bayigou.R;
 import www.yigou.com.bayigou.mine.bean.User;
 import www.yigou.com.bayigou.mine.bean.UserBean;
 import www.yigou.com.bayigou.mine.presenter.MineLoginPresenter;
+import www.yigou.com.bayigou.utils.SharedPreferencesUtils;
+import www.yigou.com.bayigou.utils.SpUtil;
 
 public class LoginActivity extends AppCompatActivity implements MineILoginView{
 
@@ -87,7 +89,11 @@ public class LoginActivity extends AppCompatActivity implements MineILoginView{
     public void onLoginSuccess(UserBean userBean) {//成功
         String code = userBean.getCode();
         if (code.equals("0")){
+            //存入数据
+//            SpUtil.putString(this,"uid","String");
+//            SpUtil.putString(this,"uid",userBean.getData().getUid());
             //普通时间发送消息给putong1用post方法
+
 
             Toasty.success(LoginActivity.this, "登陆成功!", Toast.LENGTH_SHORT).show();
             Log.d(TAG, "onLoginSuccess: ==========="+code);

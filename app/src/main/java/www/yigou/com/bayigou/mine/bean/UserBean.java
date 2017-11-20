@@ -62,14 +62,14 @@ public class UserBean {
         private Object appsecret;
         private String createtime;
         private Object email;
-        private int gender;
+        private String gender;
         private Object icon;
         private String mobile;
-        private int money;
+        private String money;
         private Object nickname;
         private String password;
         private String token;
-        private int uid;
+        private String uid;
         private String username;
 
         public Object getAge() {
@@ -112,11 +112,11 @@ public class UserBean {
             this.email = email;
         }
 
-        public int getGender() {
+        public String getGender() {
             return gender;
         }
 
-        public void setGender(int gender) {
+        public void setGender(String gender) {
             this.gender = gender;
         }
 
@@ -136,11 +136,11 @@ public class UserBean {
             this.mobile = mobile;
         }
 
-        public int getMoney() {
+        public String getMoney() {
             return money;
         }
 
-        public void setMoney(int money) {
+        public void setMoney(String money) {
             this.money = money;
         }
 
@@ -168,11 +168,11 @@ public class UserBean {
             this.token = token;
         }
 
-        public int getUid() {
+        public String getUid() {
             return uid;
         }
 
-        public void setUid(int uid) {
+        public void setUid(String uid) {
             this.uid = uid;
         }
 

@@ -14,7 +14,8 @@ public class GoodsInfo {
     private int position;// 绝对位置，只在ListView构造的购物车中，在删除时有效
     private String color;
     private String size;
-    private int goodsImg;
+    /*此处将图片改为String类型*/
+    private String goodsImg;
     private double discountPrice;
 
     public double getDiscountPrice() {
@@ -25,11 +26,11 @@ public class GoodsInfo {
         this.discountPrice = discountPrice;
     }
 
-    public int getGoodsImg() {
+    public String getGoodsImg() {
         return goodsImg;
     }
 
-    public void setGoodsImg(int goodsImg) {
+    public void setGoodsImg(String goodsImg) {
         this.goodsImg = goodsImg;
     }
 
@@ -50,7 +51,7 @@ public class GoodsInfo {
     }
 
     public GoodsInfo(String id, String name, String desc, double price, int count, String color,
-             String size, int goodsImg,double discountPrice) {
+             String size, String goodsImg,double discountPrice) {
         Id = id;
         this.name = name;
         this.desc = desc;
