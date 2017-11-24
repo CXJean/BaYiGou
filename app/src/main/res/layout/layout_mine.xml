@@ -261,7 +261,7 @@
         android:id="@+id/btn_outLogin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="退出应用"
+        android:text="退出登陆"
         />
 
 </LinearLayout>

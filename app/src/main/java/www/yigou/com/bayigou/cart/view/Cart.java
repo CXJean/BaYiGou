@@ -18,6 +18,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -34,13 +38,16 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import www.yigou.com.bayigou.R;
 import www.yigou.com.bayigou.cart.CartAdapter.ShopcartAdapter;
+import www.yigou.com.bayigou.cart.bean.AddDeleteBean;
 import www.yigou.com.bayigou.cart.bean.CartsBean;
 import www.yigou.com.bayigou.cart.bean.GoodsInfo;
 import www.yigou.com.bayigou.cart.bean.StoreInfo;
 import www.yigou.com.bayigou.cart.model.OnGetCartsFinishListener;
 import www.yigou.com.bayigou.home.bean.AddCart;
 import www.yigou.com.bayigou.home.model.OnDataFinish;
+import www.yigou.com.bayigou.mine.bean.User;
 import www.yigou.com.bayigou.utils.RetroLoginFactory;
+import www.yigou.com.bayigou.utils.SpUtil;
 
 /**
  * Created by xue on 2017-11-09.
@@ -88,7 +95,8 @@ public class Cart extends Fragment  implements ShopcartAdapter.CheckInterface,
     private List<StoreInfo> groups = new ArrayList<StoreInfo>();// 组元素数据列表
     private Map<String, List<GoodsInfo>> children = new HashMap<String, List<GoodsInfo>>();// 子元素数据列表
     private int flag = 0;
-
+    String uidStr = "";
+    private String uid;
 
     @Nullable
     @Override
@@ -98,14 +106,27 @@ public class Cart extends Fragment  implements ShopcartAdapter.CheckInterface,
 
         unbinder = ButterKnife.bind(this, view);
 
-        getSelectCarts("904");
+        //注册事件
+        EventBus.getDefault().register(this);
 //        initDatas();
 //        initEvents();
         return view;
 
     }
 
+
+    //处理得到的值
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMoonEvent(User user) {
+
+//        Log.d("uid", "======事件内=======" + SpUtil.getString(getActivity(),"uid",""));
+        uidStr=user.getUid();
+        Log.d(TAG, "onMoonEvent:=======传过来的值"+user.getUid().toString());
+    }
+
+
     private void initEvents() {
+        Log.d(TAG, "initEvents: ========商铺数"+groups.size()+"============"+children.size());
         selva = new ShopcartAdapter(groups, children, getActivity());
         selva.setCheckInterface(this);// 关键步骤1,设置复选框接口
         selva.setModifyCountInterface(this);// 关键步骤2,设置数量增减接口
@@ -119,6 +140,15 @@ public class Cart extends Fragment  implements ShopcartAdapter.CheckInterface,
     @Override
     public void onResume() {
         super.onResume();
+
+        uid = SpUtil.getString(getActivity(), "uid", "").toString().trim();
+
+        Log.d(TAG, "onResume: ======== "+uid.toString());
+        if (SpUtil.getString(getActivity(), "uid","") instanceof String&&null!= uid){
+            Log.d(TAG, "onCreateView请求数据: ------------"+ uid +"----"+ uid.length());
+//            String id = (String)uid;
+            getSelectCarts("1000");
+        }
         setCartNum();
     }
 
@@ -133,7 +163,7 @@ public class Cart extends Fragment  implements ShopcartAdapter.CheckInterface,
             List<GoodsInfo> childs = children.get(group.getId());
             for (GoodsInfo goodsInfo : childs) {
                 count += 1;
-            }
+        }
         }
         title.setText("购物车" + "(" + count + ")");
     }
@@ -158,7 +188,7 @@ public class Cart extends Fragment  implements ShopcartAdapter.CheckInterface,
             }
             children.put(groups.get(i).getId(), products);// 将组元素的一个唯一值，这里取Id，作为子元素List的Key
         }*/
-        Log.d(TAG, "initDatas: "+cartsBean.toString());
+        Log.d(TAG, "initDatas: "+cartsBean.getData().size()+"============"+cartsBean.toString());
          for (int i = 0; i < cartsBean.getData().size(); i++) {
                 groups.add(new StoreInfo(cartsBean.getData().get(i).getSellerid()+"", cartsBean.getData().get(i).getSellerName()));
              Log.d(TAG, "initDatas: "+groups.size()+"=================");
@@ -177,8 +207,8 @@ public class Cart extends Fragment  implements ShopcartAdapter.CheckInterface,
                             img[i * j],
                             cartsBean.getData().get(i).getList().get(j).getBargainPrice()));
 
-                children.put(groups.get(i).getId(), products);// 将组元素的一个唯一值，这里取Id，作为子元素List的Key
-             }
+                }
+             children.put(groups.get(i).getId(), products);// 将组元素的一个唯一值，这里取Id，作为子元素List的Key
          }
         initEvents();
     }
@@ -203,18 +233,23 @@ public class Cart extends Fragment  implements ShopcartAdapter.CheckInterface,
                 }
             }
             childs.removeAll(toBeDeleteProducts);
+            doDeleteCarts(uid+"","1");
         }
         groups.removeAll(toBeDeleteGroups);
         selva.notifyDataSetChanged();
         calculate();
     }
-    //解绑
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        unbinder.unbind();
+
+
+    //获取删除以后的结果的数据
+    public void getDeleteData(AddDeleteBean addDeleteBean){
+        Log.d(TAG, "getCartData:数据 "+addDeleteBean.getMsg()+"=========="+addDeleteBean.getCode());
+        if (addDeleteBean.getCode().equals("")){
+
+        }
     }
 
+    //点击事件
     @OnClick({R.id.back, R.id.subtitle,R.id.all_chekbox, R.id.tv_go_to_pay, R.id.tv_share, R.id.tv_save, R.id.tv_delete})
     public void onViewClicked(View view) {
         AlertDialog alert;
@@ -349,6 +384,7 @@ public class Cart extends Fragment  implements ShopcartAdapter.CheckInterface,
         calculate();
 
     }
+    //判断是否全选
     private boolean isAllCheck() {
 
         for (StoreInfo group : groups) {
@@ -397,6 +433,7 @@ public class Cart extends Fragment  implements ShopcartAdapter.CheckInterface,
         tvTotalPrice.setText("￥" + totalPrice);
         tvGoToPay.setText("去支付(" + totalCount + ")");
     }
+
     @Override
     public void groupEdit(int groupPosition) {
         groups.get(groupPosition).setIsEdtor(true);
@@ -451,13 +488,57 @@ public class Cart extends Fragment  implements ShopcartAdapter.CheckInterface,
         handler.sendEmptyMessage(0);
     }
 
-    public void getCartData(CartsBean cartsBean){
-        Log.d(TAG, "getCartData:数据 "+cartsBean.getMsg()+"=========="+cartsBean.getCode());
-    }
 
+    //重要
+    // 判断是否展示—与RadioGroup等连用，进行点击切换
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        int k=-1;
+//        super.onHiddenChanged(hidden);
+        if (k==0){
+            if (!hidden){//显示
+                onPause();//获取焦点
+                k=0;
+            }
+        }
+
+    }
+    //删除购物车
+    public void doDeleteCarts(String uid,String pid){
+
+        Log.d(TAG, "网络请求访问购物车==============="+uid+"======="+pid);
+        Observable<AddDeleteBean> deletecarts = RetroLoginFactory.getInstance().deleteCart(uid, pid);
+            deletecarts.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<AddDeleteBean>() {
+                    @Override
+                    public void onCompleted() {
+                        Log.d(TAG, "onCompleted: ");
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.d(TAG, "onError: ");
+                        e.printStackTrace();
+                    }
+
+                    @Override
+                    public void onNext(AddDeleteBean addDeleteBean) {
+                        Log.d(TAG, "查询购物车: "+addDeleteBean.getCode()+"=========="+addDeleteBean.getMsg());
+                        if (null!=addDeleteBean){
+                            getDeleteData(addDeleteBean);
+                        }else{
+                            Log.d(TAG, "onNext:购物车-------------- 删除购物车失败");
+                        }
+
+                    }
+                });
+    }
+    //请求购物车
     public void getSelectCarts(String uid){
 
-        Observable<CartsBean> Carts = RetroLoginFactory.getInstance().getSelectCart(uid);
+        Log.d(TAG, "网络请求访问购物车==============="+uid);
+        Observable<CartsBean> Carts = RetroLoginFactory.getInstance().getSelectCart(uid,"android");
             Carts.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<CartsBean>() {
@@ -475,8 +556,28 @@ public class Cart extends Fragment  implements ShopcartAdapter.CheckInterface,
                     @Override
                     public void onNext(CartsBean cartsBean) {
                         Log.d(TAG, "查询购物车: "+cartsBean.getCode()+"=========="+cartsBean.getMsg()+"=========="+cartsBean.getData().get(0).getList().get(0).getTitle());
-                        initDatas(cartsBean);
+                        if (null!=cartsBean){
+                            initDatas(cartsBean);
+                        }else{
+                            Log.d(TAG, "onNext:购物车-------------- 请求数据失败");
+                        }
+
                     }
                 });
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        //取消注册事件
+        EventBus.getDefault().unregister(getActivity());
+    }
+
+    //解绑
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
+    }
+
 }

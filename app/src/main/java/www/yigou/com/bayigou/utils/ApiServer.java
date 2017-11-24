@@ -12,6 +12,7 @@ import retrofit2.http.POST;
 import retrofit2.http.QueryMap;
 import retrofit2.http.Url;
 import rx.Observable;
+import www.yigou.com.bayigou.cart.bean.AddDeleteBean;
 import www.yigou.com.bayigou.cart.bean.CartsBean;
 import www.yigou.com.bayigou.home.bean.AddCart;
 import www.yigou.com.bayigou.home.bean.GoodsInfoBean;
@@ -25,6 +26,7 @@ import www.yigou.com.bayigou.sort.bean.ProductCatagory;
  */
 
 public interface ApiServer {
+
 
 //    @GET("v1/restserver/ting?method=baidu.ting.billboard.billList&type=1&size=10&offset=0")
 //    Observable<HomeBean> getHome();
@@ -42,7 +44,7 @@ public interface ApiServer {
     //商品详情
     @FormUrlEncoded
     @POST("product/getProductDetail")
-    Observable<GoodsInfoBean> getGoodsInfo(@Field("pid") String pid);
+    Observable<GoodsInfoBean> getGoodsInfo(@Field("pid") String pid,@Field("source") String source);
 
     //商品分类接口,无参数
     @GET("product/getCatagory")
@@ -61,6 +63,12 @@ public interface ApiServer {
     //查询购物车
     @FormUrlEncoded//读参数进行urlEncoded
     @POST("/product/getCarts")
-    Observable<CartsBean> getSelectCart(@Field("uid") String uid);
+    Observable<CartsBean> getSelectCart(@Field("uid") String uid,@Field("source") String source);
+
+//    http://120.27.23.105/product/deleteCart?uid=72&pid=1
+    //删除购物车
+    @FormUrlEncoded//读参数进行urlEncoded
+    @POST("/product/deleteCart")
+    Observable<AddDeleteBean> deleteCart(@Field("uid") String uid, @Field("pid") String pid);
 
 }

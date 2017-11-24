@@ -6,6 +6,7 @@ package www.yigou.com.bayigou.utils;
 
 public class Api {
 
+
 //    http://m.yunifang.com/yunifang/mobile/home
 //    首页
     public static final String HOME_URL="http://m.yunifang.com/";
@@ -13,6 +14,7 @@ public class Api {
     public static final String LOGIN_REG="http://120.27.23.105/";
 
     public static final String SORT_RIGHT_PATH = "product/getProductCatagory";
+
 
 
 }

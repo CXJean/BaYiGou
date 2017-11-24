@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 
 /**
  * Created by xue on 2017-11-18.
+ * SpUtil工具类
  */
 
 public class SpUtil {

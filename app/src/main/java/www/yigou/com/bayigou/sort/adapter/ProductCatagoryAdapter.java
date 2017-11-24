@@ -83,7 +83,7 @@ public class ProductCatagoryAdapter extends BaseAdapter{
 
             list.add(new ProductCatagory.DataBean.ListBean(listBean.getIcon(),listBean.getName(),listBean.getPcid(),listBean.getPscid()));
         }*/
-        Log.d("子类下的数据", "getView: "+list.get(0).getName()+"===="+list.size());
+//        Log.d("子类下的数据", "getView: "+list.get(0).getName()+"===="+list.size());
         //GridView图片
 //          有图的gridview
        /* final ProductsAdapter adapter = new ProductsAdapter(list, context);

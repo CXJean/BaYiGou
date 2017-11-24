@@ -1,5 +1,6 @@
 package www.yigou.com.bayigou.mine.view;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -8,12 +9,14 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -57,8 +60,6 @@ public class Mine extends Fragment {
         //注册ButterKnife
         unbinder = ButterKnife.bind(this, view);
 
-
-//        userUid = SpUtil.getString(getActivity(), "uid", "");
         //注册事件
         EventBus.getDefault().register(this);
 
@@ -75,9 +76,8 @@ public class Mine extends Fragment {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMoonEvent(User user) {
 
-        //uid
-//        String userUid = (String) SharedPreferencesUtils.getParam(getActivity(), "uid", "String");
-        Log.d("uid", "onMoonEvent:----- " +userUid );
+        Log.d("uid", "======事件内=======" + SpUtil.getString(getActivity(),"uid",""));
+
         userNumPhone.setText(user.getUsername());
     }
 
@@ -96,8 +96,8 @@ public class Mine extends Fragment {
                 startActivity(intent);
                 break;
             case R.id.btn_outLogin:
-                //退出程序
-                showCheckDialog("您将退出应用!");
+                //退出登陆
+                showCheckDialog("您将退出登陆!");
                 break;
         }
     }
@@ -111,9 +111,11 @@ public class Mine extends Fragment {
          .setMessage(message)
          .setPositiveButton("确定", new DialogInterface.OnClickListener(){
                 public void onClick(DialogInterface dialog, int which) {
-                    SharedPreferencesUtils.deleAll(getActivity());
-                    Log.d("uid", "清空==================:----- " + SharedPreferencesUtils.getParam(getActivity(), "uid", "String"));
-                    System.exit(0);
+                    //清空
+                    SpUtil.deleAll(getActivity());
+                    Log.d("uid", "========清空==========:----- " + SpUtil.getString(getActivity(),"uid",""));
+                    userNumPhone.setText("用户名");
+//                    System.exit(0);//退出
                 }
          }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
@@ -121,7 +123,6 @@ public class Mine extends Fragment {
                 }
          })
          .create().show();
-
     }
 
 }

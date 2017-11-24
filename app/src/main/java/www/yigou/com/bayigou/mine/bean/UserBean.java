@@ -183,5 +183,34 @@ public class UserBean {
         public void setUsername(String username) {
             this.username = username;
         }
+
+        @Override
+        public String toString() {
+            return "DataBean{" +
+                    "age=" + age +
+                    ", appkey=" + appkey +
+                    ", appsecret=" + appsecret +
+                    ", createtime='" + createtime + '\'' +
+                    ", email=" + email +
+                    ", gender='" + gender + '\'' +
+                    ", icon=" + icon +
+                    ", mobile='" + mobile + '\'' +
+                    ", money='" + money + '\'' +
+                    ", nickname=" + nickname +
+                    ", password='" + password + '\'' +
+                    ", token='" + token + '\'' +
+                    ", uid='" + uid + '\'' +
+                    ", username='" + username + '\'' +
+                    '}';
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "UserBean{" +
+                "msg='" + msg + '\'' +
+                ", code='" + code + '\'' +
+                ", data=" + data +
+                '}';
     }
 }

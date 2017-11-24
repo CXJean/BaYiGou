@@ -7,7 +7,7 @@
         android:id="@+id/sort_left_listview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#ccc"
+        android:background="#e9e6e6"
         android:backgroundTintMode="add"
         android:layout_weight="2"></ListView>
 
@@ -16,6 +16,6 @@
         android:id="@+id/sort_right_listview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#ccc"
+        android:background="#eaf7f6f6"
         android:layout_weight="1"></ListView>
 </LinearLayout>
